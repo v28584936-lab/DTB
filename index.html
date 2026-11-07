@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>اكسب مجاناً 100/100</title>
+    <!-- هنا يمكنك إضافة سكريبت شبكة الإعلانات إذا كنت تستخدم شبكة إعلانات ويب -->
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding-bottom: 30px;
+            overscroll-behavior-y: contain;
+        }
+        header {
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+            width: 100%;
+            padding: 20px 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border-bottom: 2px solid #6366f1;
+        }
+        h1 {
+            font-size: 22px;
+            color: #fbbf24;
+            margin-bottom: 5px;
+        }
+        .points-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px auto;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+        .points-card h2 {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        .points-card .count {
+            font-size: 36px;
+            font-weight: bold;
+            color: #10b981;
+            margin: 5px 0;
+        }
+        .ad-btn {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4);
+        }
+        .ad-btn:disabled {
+            background: #475569;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .container {
+            width: 90%;
+            max-width: 400px;
+            margin-top: 10px;
+        }
+        .section-title {
+            font-size: 18px;
+            margin: 20px 0 10px 0;
+            color: #38bdf8;
+            border-right: 4px solid #38bdf8;
+            padding-right: 10px;
+        }
+        .reward-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .reward-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .reward-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #f1f5f9;
+        }
+        .reward-cost {
+            font-size: 13px;
+            color: #fbbf24;
+            margin: 8px 0;
+        }
+        .promo-badge {
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .claim-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .modal-content {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+            width: 85%;
+            max-width: 350px;
+            text-align: center;
+            border: 1px solid #475569;
+        }
+        .modal input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 6px;
+            border: 1px solid #475569;
+            background: #0f172a;
+            color: white;
+            text-align: center;
+            font-size: 16px;
+        }
+        .whatsapp-btn {
+            background-color: #25D366;
+            color: white;
+            display: block;
+            padding: 12px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 15px;
+        }
+        .proof-box {
+            background: #0f172a;
+            border: 1px dashed #fbbf24;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+        .proof-number {
+            font-size: 22px;
+            color: #fbbf24;
+            font-weight: bold;
+            letter-spacing: 2px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>اكسب مجاناً 100/100</h1>
+    </header>
+
+    <div class="points-card">
+        <h2>رصيد النقاط الحالي</h2>
+        <div class="count" id="points-display">0</div>
+        <!-- زر مشاهدة الإعلان المرتبط بدالة الإعلانات -->
+        <button class="ad-btn" id="watch-ad-btn" onclick="showRewardedAd()">مشاهدة إعلان (+15 نقطة)</button>
+        <div id="cooldown-timer" style="margin-top: 8px; font-size: 12px; color: #94a3b8; display: none;"></div>
+    </div>
+
+    <div class="container">
+        <div class="section-title">جواهر فري فاير</div>
+        <div class="reward-grid">
+            <div class="reward-card">
+                <div>
+                    <span class="promo-badge">عرض خاص</span>
+                    <div class="reward-title">110 جوهرة</div>
+                    <div class="reward-cost">5 نقاط</div>
+                </div>
+                <button class="claim-btn" onclick="openClaimModal('110 جوهرة فري فاير', 5)">استبدال</button>
+            </div>
+            <div class="reward-card">
+                <div>
+                    <div class="reward-title">200 جوهرة</div>
+                    <div class="reward-cost">200 نقطة</div>
+                </div>
+                <button class="claim-btn" onclick="openClaimModal('200 جوهرة فري فاير', 200)">استبدال</button>
+            </div>
+            <div class="reward-card" style="grid-column: span 2;">
+                <div>
+                    <div class="reward-title">1000 جوهرة</div>
+                    <div class="reward-cost">500 نقطة</div>
+                </div>
+                <button class="claim-btn" onclick="openClaimModal('1000 جوهرة فري فاير', 500)">استبدال</button>
+            </div>
+        </div>
+
+        <div class="section-title">شدات ببجي (PUBG UC)</div>
+        <div class="reward-grid">
+            <div class="reward-card">
+                <div>
+                    <div class="reward-title">200 شدة</div>
+                    <div class="reward-cost">300 نقطة</div>
+                </div>
+                <button class="claim-btn" onclick="openClaimModal('200 شدة ببجي', 300)">استبدال</button>
+            </div>
+            <div class="reward-card">
+                <div>
+                    <div class="reward-title">1000 شدة</div>
+                    <div class="reward-cost">700 نقطة</div>
+                </div>
+                <button class="claim-btn" onclick="openClaimModal('1000 شدة ببجي', 700)">استبدال</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Window -->
+    <div class="modal" id="modal">
+        <div class="modal-content" id="modal-body"></div>
+    </div>
+
+    <script>
+        const myPhoneNumber = "249916250407";
+        // ضع هنا كود وحدة الإعلانات الخاصة بك من AdMob مستقبلاً إذا احتجت ربطه بـ SDK التطبيق
+        const admobAdUnitId = "ca-app-pub-XXXXXXXXXXXXXXXX/YYYYYYYYYY"; 
+
+        let points = parseInt(localStorage.getItem('app_points')) || 0;
+        let cooldownInterval = null;
+
+        document.getElementById('points-display').innerText = points;
+        checkStoredCooldown();
+
+        // دالة عرض الإعلان (يمكن ربطها بـ AdMob SDK عند تحويل التطبيق لـ APK)
+        function showRewardedAd() {
+            const btn = document.getElementById('watch-ad-btn');
+            btn.disabled = true;
+            btn.innerText = "جاري تحميل الإعلان...";
+
+            // محاكاة وقت عرض الإعلان (عادة بين 5 إلى 30 ثانية حسب شبكة الإعلانات)
+            setTimeout(() => {
+                // هنا يتم منح المكافأة بعد إتمام مشاهدة الإعلان بنجاح
+                grantReward();
+            }, 2000);
+        }
+
+        // دالة منح النقاط وتشغيل المؤقت
+        function grantReward() {
+            points += 15;
+            localStorage.setItem('app_points', points);
+            document.getElementById('points-display').innerText = points;
+
+            // حفظ وقت نهاية الـ 30 ثانية في الذاكرة لضمان عدم تجاوزها
+            const cooldownEndTime = Date.now() + (30 * 1000);
+            localStorage.setItem('cooldown_end_time', cooldownEndTime);
+            
+            startCooldownTimer(30);
+        }
+
+        function checkStoredCooldown() {
+            const storedEndTime = localStorage.getItem('cooldown_end_time');
+            if (storedEndTime) {
+                const remainingSeconds = Math.ceil((parseInt(storedEndTime) - Date.now()) / 1000);
+                if (remainingSeconds > 0) {
+                    startCooldownTimer(remainingSeconds);
+                } else {
+                    localStorage.removeItem('cooldown_end_time');
+                }
+            }
+        }
+
+        function startCooldownTimer(seconds) {
+            const btn = document.getElementById('watch-ad-btn');
+            const timerDisplay = document.getElementById('cooldown-timer');
+            
+            btn.disabled = true;
+            timerDisplay.style.display = "block";
+            let timeLeft = seconds;
+
+            if (cooldownInterval) clearInterval(cooldownInterval);
+
+            cooldownInterval = setInterval(() => {
+                btn.innerText = `انتظر (${timeLeft} ثانية)`;
+                timerDisplay.innerText = `الإعلان التالي متاح بعد ${timeLeft} ثانية`;
+                timeLeft--;
+
+                if (timeLeft < 0) {
+                    clearInterval(cooldownInterval);
+                    localStorage.removeItem('cooldown_end_time');
+                    btn.disabled = false;
+                    btn.innerText = "مشاهدة إعلان (+15 نقطة)";
+                    timerDisplay.style.display = "none";
+                }
+            }, 1000);
+        }
+
+        function openClaimModal(rewardTitle, cost) {
+            if (points < cost) {
+                alert(`نقاطك غير كافية! تحتاج إلى ${cost} نقطة.`);
+                return;
+            }
+
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <h3 style="color: #38bdf8; margin-bottom: 10px;">طلب ${rewardTitle}</h3>
+                <p style="font-size: 14px; color: #94a3b8;">يرجى إدخال الـ ID الخاص بك في اللعبة:</p>
+                <input type="number" id="player-id" placeholder="أدخل ID اللاعب هنا">
+                <button class="claim-btn" style="width: 100%;" onclick="processClaim('${rewardTitle}', ${cost})">تأكيد الطلب</button>
+                <button style="background: transparent; color: #94a3b8; border: none; margin-top: 12px; cursor: pointer;" onclick="closeModal()">إلغاء</button>
+            `;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function generateProofNumber() {
+            const length = Math.floor(Math.random() * (15 - 5 + 1)) + 5;
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += Math.floor(Math.random() * 10);
+            }
+            return result;
+        }
+
+        function processClaim(rewardTitle, cost) {
+            // [تم تصحيح الخطأ هنا بوضع الأقواس الصحيحة]
+            const playerId = document.getElementById('player-id').value;
+            if (!playerId) {
+                alert("الرجاء إدخال ID اللاعب!");
+                return;
+            }
+
+            points -= cost;
+            localStorage.setItem('app_points', points);
+            document.getElementById('points-display').innerText = points;
+
+            const proofNumber = generateProofNumber();
+            const message = encodeURIComponent(
+                `للتواصل وإكمال الدفع في واتساب\n` +
+                `المكافأة: ${rewardTitle}\n` +
+                `رقم الإثبات: ${proofNumber}\n` +
+                `ID اللاعب: ${playerId}`
+            );
+
+            const whatsappUrl = `https://wa.me/${myPhoneNumber}?text=${message}`;
+
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <p style="font-size: 16px; font-weight: bold; color: #38bdf8; margin-bottom: 8px;">للتواصل وإكمال الدفع في واتساب</p>
+                
+                <div class="proof-box">
+                    <div style="font-size: 12px; color: #94a3b8; margin-bottom: 4px;">رقم الإثبات الخاص بك:</div>
+                    <div class="proof-number">${proofNumber}</div>
+                </div>
+
+                <a href="${whatsappUrl}" target="_blank" class="whatsapp-btn">
+                    اضغط هنا للتواصل عبر الواتساب
+                </a>
+                
+                <button style="background: transparent; color: #94a3b8; border: none; margin-top: 15px; cursor: pointer;" onclick="closeModal()">إغلاق</button>
+            `;
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
